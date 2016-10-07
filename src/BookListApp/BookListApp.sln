@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.BookActor", "BookL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookList.BookActor.Interfaces", "BookList.BookActor.Interfaces\BookList.BookActor.Interfaces.csproj", "{7EC09802-5054-4131-9F68-D3090575BA09}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{203AF35A-15C7-459D-A36C-1872F6FC3BAF}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\doc\MicroservicesInServiceFabric.pptx = ..\..\doc\MicroservicesInServiceFabric.pptx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
