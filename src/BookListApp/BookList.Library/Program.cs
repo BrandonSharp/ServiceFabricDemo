@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
+using System.Net;
 
 namespace BookList.Library {
     internal static class Program {
@@ -18,6 +19,8 @@ namespace BookList.Library {
 
                 ServiceRuntime.RegisterServiceAsync("LibraryType",
                     context => new Library(context)).GetAwaiter().GetResult();
+
+                ServicePointManager.DefaultConnectionLimit = 10240;
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Library).Name);
 
