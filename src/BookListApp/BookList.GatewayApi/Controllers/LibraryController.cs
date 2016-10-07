@@ -14,6 +14,7 @@ namespace BookList.GatewayApi.Controllers {
         readonly string libraryServiceName = "Library";
 
         [HttpGet]
+        [Route("book-list")]
         public async Task<IHttpActionResult> GetCurrentBookList() {
             // TODO: Request book list from library service
 
