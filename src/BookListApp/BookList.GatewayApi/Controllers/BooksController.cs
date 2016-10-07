@@ -22,7 +22,7 @@ namespace BookList.GatewayApi.Controllers {
         [HttpPost]
         [Route("{isbn}")]
         public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
-            // TODO: Forward post request to library service
+            // TODO: Forward post request to library service, let it handle creating book actor, and adding it to its book list.
 
             return this.CreatedAtRoute(nameof(GetBookInformation), isbn, bookInfo);
         }
@@ -36,16 +36,27 @@ namespace BookList.GatewayApi.Controllers {
         }
 
         [HttpGet]
-        [Route("sayhello")]
-        public async Task<IHttpActionResult> SayHello() {
-            try {
-                var response = await MakeServiceGetRequest(libraryServiceName, new ServicePartitionKey(0), $"book/sayhello");
-                var responseData = await response.Content.ReadAsStringAsync();
+        [Route("{isbn}/status")]
+        public async Task<IHttpActionResult> GetBookStatus(string isbn) {
+            // TODO: Get the book's current status
 
-                return this.Ok(responseData);
-            } catch (AggregateException ex) {
-                return InternalServerError(ex.InnerException);
-            }
+            return this.NotFound();
+        }
+
+        [HttpPut]
+        [Route("{isbn}/checkout")]
+        public async Task<IHttpActionResult> CheckoutBook(string isbn, string user) {
+            // TODO: Try to checkout the book for the given user
+
+            return this.Ok();
+        }
+
+        [HttpPut]
+        [Route("{isbn}/return")]
+        public async Task<IHttpActionResult> ReturnBook(string isbn, string user) {
+            // TODO: Try to return the book for the current user
+
+            return this.Ok();
         }
 
         async Task<HttpResponseMessage> MakeServiceGetRequest(string serviceName, ServicePartitionKey partitionKey, string route) {

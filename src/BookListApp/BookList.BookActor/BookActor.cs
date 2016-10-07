@@ -22,15 +22,25 @@ namespace BookList.BookActor {
             throw new NotImplementedException();
         }
 
-        public Task<BookCheckoutResponse> CheckoutBook(string user) {
+        public Task<BookCheckoutResponse> TryCheckoutBook(string user) {
+            // TODO: Check book status to see if it's available. 
+            //      If so, mark it unavailable, checked out to the requesting user, and return response
+            //      If not, add the user to the queue, and return response
+
             throw new NotImplementedException();
         }
 
         public Task<BookStatus> ReturnBook(string user) {
+            // TODO: Check if the user returning is the user the book is on loan to. Throw exception if not.
+            // Check the queue, and assign ownership to the next user in the queue, if any.
+            // If no queued users, then mark the book as available.
+
             throw new NotImplementedException();
         }
 
         public Task<BookStatus> GetBookStatus() {
+            // TODO: Return the current status of the book
+
             throw new NotImplementedException();
         }
 
