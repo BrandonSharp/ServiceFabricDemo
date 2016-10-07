@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Owin;
+using BookList.GatewayApi.App_Start;
 
 namespace BookList.GatewayApi {
     public static class Startup {
@@ -8,14 +9,13 @@ namespace BookList.GatewayApi {
         public static void ConfigureApp(IAppBuilder appBuilder) {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+            config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            FormatterConfig.ConfigureFormatters(config.Formatters);
 
             appBuilder.UseWebApi(config);
+            config.EnsureInitialized();
         }
     }
 }

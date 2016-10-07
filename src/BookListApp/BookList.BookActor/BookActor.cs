@@ -11,17 +11,22 @@ using BookList.BookActor.Interfaces;
 namespace BookList.BookActor {
     [StatePersistence(StatePersistence.Persisted)]
     internal class BookActor : Actor, IBookActor {
+
         public BookActor(ActorService actorService, ActorId actorId)
             : base(actorService, actorId) {
         }
 
-        public Task<bool> CreateBook(string name, string author, int pageCount) {
-            var isbn = this.GetActorId().GetStringId();
-            var info = new BookInformation() { Isbn = isbn, Name = name, Author = author, Pages = pageCount };
-            return this.StateManager.TryAddStateAsync("info", info);
+        public async Task<BookInformation> CreateBook(string name, string author, int pageCount) {
+            // TODO: Infer ISBN from actor ID, create BookInformation, and store. Return info is storage is successful.
+
+            throw new NotImplementedException();
         }
 
-        public Task<bool> CheckoutBook() {
+        public Task<BookCheckoutResponse> CheckoutBook(string user) {
+            throw new NotImplementedException();
+        }
+
+        public Task<BookStatus> ReturnBook(string user) {
             throw new NotImplementedException();
         }
 
@@ -31,10 +36,6 @@ namespace BookList.BookActor {
 
         public Task<BookInformation> GetBookInformation() {
             return this.StateManager.GetStateAsync<BookInformation>("info");
-        }
-
-        public Task<BookStatus> ReturnBook() {
-            throw new NotImplementedException();
         }
 
         /// <summary>

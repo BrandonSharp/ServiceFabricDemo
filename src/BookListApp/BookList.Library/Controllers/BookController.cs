@@ -1,4 +1,5 @@
-﻿using Microsoft.ServiceFabric.Data;
+﻿using BookList.Library.Models;
+using Microsoft.ServiceFabric.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,14 @@ namespace BookList.Library.Controllers {
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> CreateBook(string isbn, string name, string author, int pageCount) {
+        [Route("{isbn}")]
+        public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
             try {
-                throw new NotImplementedException();
+                // TODO: Initialize actor
+
+                // TODO: If actor creation successful, store book isbn & name in a reliable dictionary
+
+
             } catch (Exception ex) {
                 return this.InternalServerError(ex);
             }

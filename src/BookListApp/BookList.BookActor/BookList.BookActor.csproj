@@ -97,6 +97,10 @@
       <Project>{7EC09802-5054-4131-9F68-D3090575BA09}</Project>
       <Name>BookList.BookActor.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BookList.Common\BookList.Common.csproj">
+      <Project>{3303CE72-2140-41DC-8AEB-71B006AB2F6F}</Project>
+      <Name>BookList.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.ServiceFabric.Actors.2.2.207\build\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\packages\Microsoft.ServiceFabric.Actors.2.2.207\build\Microsoft.ServiceFabric.Actors.targets')" />

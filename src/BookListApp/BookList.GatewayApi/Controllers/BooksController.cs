@@ -1,5 +1,6 @@
 ﻿using BookList;
 using BookList.BookActor.Interfaces;
+using BookList.GatewayApi.Models;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
 using Microsoft.ServiceFabric.Services.Client;
@@ -13,10 +14,26 @@ using System.Web.Http;
 
 namespace BookList.GatewayApi.Controllers {
     [ServiceRequestActionFilter]
-    [RoutePrefix("book")]
-    public class BookController : ApiController {
+    [RoutePrefix("api/books")]
+    public class BooksController : ApiController {
         readonly string libraryServiceName = "Library";
         readonly string bookActorServiceName = "BookActorService";
+
+        [HttpPost]
+        [Route("{isbn}")]
+        public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
+            // TODO: Forward post request to library service
+
+            return this.CreatedAtRoute(nameof(GetBookInformation), isbn, bookInfo);
+        }
+
+        [HttpGet]
+        [Route("{isbn}", Name = nameof(GetBookInformation))]
+        public async Task<IHttpActionResult> GetBookInformation(string isbn) {
+            // TODO: Call actor for book info
+
+            return this.NotFound();
+        }
 
         [HttpGet]
         [Route("sayhello")]
