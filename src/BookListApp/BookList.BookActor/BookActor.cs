@@ -15,6 +15,12 @@ namespace BookList.BookActor {
             : base(actorService, actorId) {
         }
 
+        public Task<bool> CreateBook(string name, string author, int pageCount) {
+            var isbn = this.GetActorId().GetStringId();
+            var info = new BookInformation() { Isbn = isbn, Name = name, Author = author, Pages = pageCount };
+            return this.StateManager.TryAddStateAsync("info", info);
+        }
+
         public Task<bool> CheckoutBook() {
             throw new NotImplementedException();
         }
@@ -38,12 +44,7 @@ namespace BookList.BookActor {
         protected override Task OnActivateAsync() {
             ActorEventSource.Current.ActorMessage(this, "Actor activated.");
 
-            var bookName = this.GetActorId().GetStringId();
-            var pageCount = new Random().Next(100, 700);
-
-            var info = new BookInformation() { Name = bookName, Pages = pageCount };
-
-            return this.StateManager.TryAddStateAsync("info", info);
+            return Task.FromResult(true);
         }
     }
 }

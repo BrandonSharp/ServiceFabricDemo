@@ -9,6 +9,10 @@ namespace BookList.BookActor.Interfaces {
     [DataContract]
     public class BookInformation {
         [DataMember]
+        public string Isbn { get; set; }
+        [DataMember]
+        public string Author { get; set; }
+        [DataMember]
         public string Name { get; set; }
         [DataMember]
         public int Pages { get; set; }

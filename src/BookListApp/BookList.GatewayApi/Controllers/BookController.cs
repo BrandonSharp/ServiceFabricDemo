@@ -22,14 +22,7 @@ namespace BookList.GatewayApi.Controllers {
         [Route("sayhello")]
         public async Task<IHttpActionResult> SayHello() {
             try {
-                var libraryServiceUri = new ServiceUriBuilder(libraryServiceName).ToUri();
-                ServicePartitionKey partitionKey = new ServicePartitionKey(0);
-
-                HttpClient client = new HttpClient();
-                var response = await client.SendToServiceAsync(libraryServiceUri,
-                    partitionKey,
-                    () => new HttpRequestMessage(HttpMethod.Get, $"book/sayhello"));
-
+                var response = await MakeServiceGetRequest(libraryServiceName, new ServicePartitionKey(0), $"book/sayhello");
                 var responseData = await response.Content.ReadAsStringAsync();
 
                 return this.Ok(responseData);
@@ -38,8 +31,19 @@ namespace BookList.GatewayApi.Controllers {
             }
         }
 
-        private IBookActor GetActor(string bookName) {
-            var actorId = new ActorId(bookName);
+        async Task<HttpResponseMessage> MakeServiceGetRequest(string serviceName, ServicePartitionKey partitionKey, string route) {
+            var serviceUri = new ServiceUriBuilder(serviceName).ToUri();
+
+            HttpClient client = new HttpClient();
+            var response = await client.SendToServiceAsync(serviceUri,
+                partitionKey,
+                () => new HttpRequestMessage(HttpMethod.Get, route));
+
+            return response;
+        }
+
+        private IBookActor GetActor(string isbn) {
+            var actorId = new ActorId(isbn);
             ServiceUriBuilder serviceUri = new ServiceUriBuilder(bookActorServiceName);
 
             var actor = ActorProxy.Create<IBookActor>(actorId, serviceUri.ToUri());

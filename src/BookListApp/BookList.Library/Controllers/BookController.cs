@@ -19,5 +19,16 @@ namespace BookList.Library.Controllers {
         public string SayHello() {
             return "hello!";
         }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateBook(string isbn, string name, string author, int pageCount) {
+            try {
+                throw new NotImplementedException();
+            } catch (Exception ex) {
+                return this.InternalServerError(ex);
+            }
+
+            return this.Ok();
+        }
     }
 }
