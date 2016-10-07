@@ -11,7 +11,7 @@ namespace BookList.Library
         public static void RegisterComponents(HttpConfiguration config, IReliableStateManager stateManager) {
             UnityContainer container = new UnityContainer();
 
-            container.RegisterType<BookController>(
+            container.RegisterType<LibraryController>(
                 new TransientLifetimeManager(),
                 new InjectionConstructor(stateManager));
 

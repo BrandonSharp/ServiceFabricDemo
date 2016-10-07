@@ -35,8 +35,13 @@ namespace BookList.GatewayApi.Controllers {
         [Route("{isbn}")]
         public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
             // TODO: Forward post request to library service, let it handle creating book actor, and adding it to its book list.
+            var success = await PostDataToService(libraryServiceName, new ServicePartitionKey(0), $"library/book/{isbn}", bookInfo);
 
-            return this.CreatedAtRoute(nameof(GetBookInformation), isbn, bookInfo);
+            if (success) {
+                return this.CreatedAtRoute(nameof(GetBookInformation), isbn, bookInfo);
+            } else {
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -99,7 +104,6 @@ namespace BookList.GatewayApi.Controllers {
                     request.ContentType = "application/json";
                     request.Timeout = (int)client.OperationTimeout.TotalMilliseconds;
                     request.ReadWriteTimeout = (int)client.ReadWriteTimeout.TotalMilliseconds;
-                    request.ContentLength = 0;
 
                     try {
                         using (Stream requestStream = request.GetRequestStream()) {

@@ -17,35 +17,71 @@ namespace BookList.BookActor {
         }
 
         public async Task<BookInformation> CreateBook(string name, string author, int pageCount) {
-            // TODO: Infer ISBN from actor ID, create BookInformation, and store. Return info is storage is successful.
+            var isbn = this.GetActorId().GetStringId();
+            var info = new BookInformation() { Isbn = isbn, Name = name, Author = author, Pages = pageCount };
+            var stateAdded = await this.StateManager.TryAddStateAsync("info", info);
 
-            throw new NotImplementedException();
+            if(stateAdded) {
+                return info;
+            } else {
+                throw new ApplicationException("The book could not be created. (Has it been created before?)");
+            }
         }
 
-        public Task<BookCheckoutResponse> TryCheckoutBook(string user) {
-            // TODO: Check book status to see if it's available. 
-            //      If so, mark it unavailable, checked out to the requesting user, and return response
-            //      If not, add the user to the queue, and return response
+        public async Task<BookCheckoutResponse> TryCheckoutBook(string user) {
+            bool isCheckoutSuccessful = false;
 
-            throw new NotImplementedException();
+            var status = await GetBookStatus();
+
+            if(status.IsAvailable) {
+                status.IsAvailable = false;
+                status.UserWithCurrentLoan = user;
+                status.WaitlistLength = 0;
+
+                isCheckoutSuccessful = true;
+            } else {
+                var queue = await GetQueuedUsers();
+                queue.Enqueue(user);
+                status.WaitlistLength = queue.Count;
+
+                await this.StateManager.SetStateAsync("userQueue", queue);
+            }
+            await this.StateManager.SetStateAsync("status", status);
+
+            return new BookCheckoutResponse() { IsSuccessful = isCheckoutSuccessful, Status = status };
         }
 
-        public Task<BookStatus> ReturnBook(string user) {
-            // TODO: Check if the user returning is the user the book is on loan to. Throw exception if not.
-            // Check the queue, and assign ownership to the next user in the queue, if any.
-            // If no queued users, then mark the book as available.
+        public async Task<BookStatus> ReturnBook(string user) {
+            var status = await GetBookStatus();
+            if(status.UserWithCurrentLoan != user) {
+                throw new ApplicationException("That user is not the one holding the current loan.");
+            }
 
-            throw new NotImplementedException();
+            var queue = await GetQueuedUsers();
+            if(queue.Any()) {
+                var nextUser = queue.Dequeue();
+                status.UserWithCurrentLoan = nextUser;
+                status.WaitlistLength = queue.Count;
+            } else {
+                status.IsAvailable = true;
+                status.UserWithCurrentLoan = null;
+                status.WaitlistLength = 0;
+            }
+            await this.StateManager.SetStateAsync("status", status);
+
+            return status;
         }
 
         public Task<BookStatus> GetBookStatus() {
-            // TODO: Return the current status of the book
-
-            throw new NotImplementedException();
+            return this.StateManager.GetStateAsync<BookStatus>("status");
         }
 
         public Task<BookInformation> GetBookInformation() {
             return this.StateManager.GetStateAsync<BookInformation>("info");
+        }
+
+        async Task<Queue<string>> GetQueuedUsers() {
+            return await this.StateManager.GetOrAddStateAsync("userQueue", new Queue<string>());
         }
 
         /// <summary>

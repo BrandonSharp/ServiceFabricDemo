@@ -16,9 +16,9 @@ namespace BookList.GatewayApi.Controllers {
         [HttpGet]
         [Route("book-list")]
         public async Task<IHttpActionResult> GetCurrentBookList() {
-            // TODO: Request book list from library service
-
-            return this.Ok();
+            var message = await MakeServiceGetRequest(libraryServiceName, new ServicePartitionKey(0), $"library/book-list");
+            
+            return this.Ok(await message.Content.ReadAsStringAsync());
         }
 
         async Task<HttpResponseMessage> MakeServiceGetRequest(string serviceName, ServicePartitionKey partitionKey, string route) {
