@@ -16,13 +16,13 @@ namespace BookList.BookActor {
             : base(actorService, actorId) {
         }
 
-        public async Task<BookInformation> CreateBook(string name, string author, int pageCount) {
+        public async Task<BookInformation> CreateBookAsync(string name, string author, int pageCount) {
             // TODO: Infer ISBN from actor ID, create BookInformation, and store. Return info is storage is successful.
 
             throw new NotImplementedException();
         }
 
-        public Task<BookCheckoutResponse> TryCheckoutBook(string user) {
+        public Task<BookCheckoutResponse> TryCheckoutBookAsync(string user) {
             // TODO: Check book status to see if it's available. 
             //      If so, mark it unavailable, checked out to the requesting user, and return response
             //      If not, add the user to the queue, and return response
@@ -30,7 +30,7 @@ namespace BookList.BookActor {
             throw new NotImplementedException();
         }
 
-        public Task<BookStatus> ReturnBook(string user) {
+        public Task<BookStatus> ReturnBookAsync(string user) {
             // TODO: Check if the user returning is the user the book is on loan to. Throw exception if not.
             // Check the queue, and assign ownership to the next user in the queue, if any.
             // If no queued users, then mark the book as available.
@@ -38,13 +38,13 @@ namespace BookList.BookActor {
             throw new NotImplementedException();
         }
 
-        public Task<BookStatus> GetBookStatus() {
+        public Task<BookStatus> GetBookStatusAsync() {
             // TODO: Return the current status of the book
 
             throw new NotImplementedException();
         }
 
-        public Task<BookInformation> GetBookInformation() {
+        public Task<BookInformation> GetBookInformationAsync() {
             return this.StateManager.GetStateAsync<BookInformation>("info");
         }
 
