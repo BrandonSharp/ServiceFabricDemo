@@ -73,7 +73,7 @@ namespace BookList.BookActor {
         }
 
         public Task<BookStatus> GetBookStatus() {
-            return this.StateManager.GetStateAsync<BookStatus>("status");
+            return this.StateManager.GetOrAddStateAsync<BookStatus>("status", new BookStatus() { IsAvailable = true, WaitlistLength = 0 });
         }
 
         public Task<BookInformation> GetBookInformation() {

@@ -34,7 +34,6 @@ namespace BookList.GatewayApi.Controllers {
         [HttpPost]
         [Route("{isbn}")]
         public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
-            // TODO: Forward post request to library service, let it handle creating book actor, and adding it to its book list.
             var success = await PostDataToService(libraryServiceName, new ServicePartitionKey(0), $"library/book/{isbn}", bookInfo);
 
             if (success) {
@@ -47,33 +46,31 @@ namespace BookList.GatewayApi.Controllers {
         [HttpGet]
         [Route("{isbn}", Name = nameof(GetBookInformation))]
         public async Task<IHttpActionResult> GetBookInformation(string isbn) {
-            // TODO: Call actor for book info
-
-            return this.NotFound();
+            var actor = GetActor(isbn);
+            return this.Ok(await actor.GetBookInformation());
         }
 
         [HttpGet]
         [Route("{isbn}/status")]
         public async Task<IHttpActionResult> GetBookStatus(string isbn) {
-            // TODO: Get the book's current status
-
-            return this.NotFound();
+            var actor = GetActor(isbn);
+            return this.Ok(await actor.GetBookStatus());
         }
 
         [HttpPut]
         [Route("{isbn}/checkout")]
         public async Task<IHttpActionResult> CheckoutBook(string isbn, string user) {
-            // TODO: Try to checkout the book for the given user
-
-            return this.Ok();
+            var actor = GetActor(isbn);
+            var results = await actor.TryCheckoutBook(user);
+            return this.Ok(results);
         }
 
         [HttpPut]
         [Route("{isbn}/return")]
         public async Task<IHttpActionResult> ReturnBook(string isbn, string user) {
-            // TODO: Try to return the book for the current user
-
-            return this.Ok();
+            var actor = GetActor(isbn);
+            var results = await actor.ReturnBook(user);
+            return this.Ok(results);
         }
 
         async Task<HttpResponseMessage> MakeServiceGetRequest(string serviceName, ServicePartitionKey partitionKey, string route) {
