@@ -7,10 +7,10 @@ using Microsoft.ServiceFabric.Actors;
 
 namespace BookList.BookActor.Interfaces {
     public interface IBookActor : IActor {
-        Task<BookInformation> CreateBook(string name, string author, int pageCount);
-        Task<BookCheckoutResponse> TryCheckoutBook(string user);
-        Task<BookStatus> ReturnBook(string user);
-        Task<BookStatus> GetBookStatus();
-        Task<BookInformation> GetBookInformation();
+        Task<BookInformation> CreateBookAsync(string name, string author, int pageCount);
+        Task<BookCheckoutResponse> TryCheckoutBookAsync(string user);
+        Task<BookStatus> ReturnBookAsync(string user);
+        Task<BookStatus> GetBookStatusAsync();
+        Task<BookInformation> GetBookInformationAsync();
     }
 }

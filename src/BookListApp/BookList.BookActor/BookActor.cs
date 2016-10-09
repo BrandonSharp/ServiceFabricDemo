@@ -16,7 +16,7 @@ namespace BookList.BookActor {
             : base(actorService, actorId) {
         }
 
-        public async Task<BookInformation> CreateBook(string name, string author, int pageCount) {
+        public async Task<BookInformation> CreateBookAsync(string name, string author, int pageCount) {
             var isbn = this.GetActorId().GetStringId();
             var info = new BookInformation() { Isbn = isbn, Name = name, Author = author, Pages = pageCount };
             var stateAdded = await this.StateManager.TryAddStateAsync("info", info);
@@ -28,10 +28,10 @@ namespace BookList.BookActor {
             }
         }
 
-        public async Task<BookCheckoutResponse> TryCheckoutBook(string user) {
+        public async Task<BookCheckoutResponse> TryCheckoutBookAsync(string user) {
             bool isCheckoutSuccessful = false;
 
-            var status = await GetBookStatus();
+            var status = await GetBookStatusAsync();
 
             if(status.IsAvailable) {
                 status.IsAvailable = false;
@@ -51,8 +51,8 @@ namespace BookList.BookActor {
             return new BookCheckoutResponse() { IsSuccessful = isCheckoutSuccessful, Status = status };
         }
 
-        public async Task<BookStatus> ReturnBook(string user) {
-            var status = await GetBookStatus();
+        public async Task<BookStatus> ReturnBookAsync(string user) {
+            var status = await GetBookStatusAsync();
             if(status.UserWithCurrentLoan != user) {
                 throw new ApplicationException("That user is not the one holding the current loan.");
             }
@@ -72,11 +72,11 @@ namespace BookList.BookActor {
             return status;
         }
 
-        public Task<BookStatus> GetBookStatus() {
+        public Task<BookStatus> GetBookStatusAsync() {
             return this.StateManager.GetOrAddStateAsync<BookStatus>("status", new BookStatus() { IsAvailable = true, WaitlistLength = 0 });
         }
 
-        public Task<BookInformation> GetBookInformation() {
+        public Task<BookInformation> GetBookInformationAsync() {
             return this.StateManager.GetStateAsync<BookInformation>("info");
         }
 

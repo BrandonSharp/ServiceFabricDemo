@@ -47,21 +47,21 @@ namespace BookList.GatewayApi.Controllers {
         [Route("{isbn}", Name = nameof(GetBookInformation))]
         public async Task<IHttpActionResult> GetBookInformation(string isbn) {
             var actor = GetActor(isbn);
-            return this.Ok(await actor.GetBookInformation());
+            return this.Ok(await actor.GetBookInformationAsync());
         }
 
         [HttpGet]
         [Route("{isbn}/status")]
         public async Task<IHttpActionResult> GetBookStatus(string isbn) {
             var actor = GetActor(isbn);
-            return this.Ok(await actor.GetBookStatus());
+            return this.Ok(await actor.GetBookStatusAsync());
         }
 
         [HttpPut]
         [Route("{isbn}/checkout")]
         public async Task<IHttpActionResult> CheckoutBook(string isbn, string user) {
             var actor = GetActor(isbn);
-            var results = await actor.TryCheckoutBook(user);
+            var results = await actor.TryCheckoutBookAsync(user);
             return this.Ok(results);
         }
 
@@ -69,7 +69,7 @@ namespace BookList.GatewayApi.Controllers {
         [Route("{isbn}/return")]
         public async Task<IHttpActionResult> ReturnBook(string isbn, string user) {
             var actor = GetActor(isbn);
-            var results = await actor.ReturnBook(user);
+            var results = await actor.ReturnBookAsync(user);
             return this.Ok(results);
         }
 

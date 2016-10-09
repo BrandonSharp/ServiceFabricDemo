@@ -27,7 +27,7 @@ namespace BookList.Library.Controllers {
         public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
             try {
                 var actor = GetActor(isbn);
-                var info = await actor.CreateBook(bookInfo.Name, bookInfo.Author, bookInfo.PageCount);
+                var info = await actor.CreateBookAsync(bookInfo.Name, bookInfo.Author, bookInfo.PageCount);
 
                 var bookList = await this.stateManager.GetOrAddAsync<IReliableDictionary<string, string>>("bookList");
                 using (var tx = this.stateManager.CreateTransaction()) {
