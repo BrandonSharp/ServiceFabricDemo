@@ -8,11 +8,17 @@ using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace BookList.Library.Controllers {
-    [RoutePrefix("library")]
-    public class LibraryController : ApiController {
+    [RoutePrefix("book")]
+    public class BookController : ApiController {
         IReliableStateManager stateManager;
-        public LibraryController(IReliableStateManager stateManager) {
+        public BookController(IReliableStateManager stateManager) {
             this.stateManager = stateManager;
+        }
+
+        [HttpGet]
+        [Route("sayhello")]
+        public string SayHello() {
+            return "hello!";
         }
 
         [HttpPost]
