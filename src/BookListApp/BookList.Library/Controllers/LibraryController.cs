@@ -15,12 +15,6 @@ namespace BookList.Library.Controllers {
             this.stateManager = stateManager;
         }
 
-        [HttpGet]
-        [Route("sayhello")]
-        public string SayHello() {
-            return "hello!";
-        }
-
         [HttpPost]
         [Route("{isbn}")]
         public async Task<IHttpActionResult> CreateBook(string isbn, [FromBody] BookCreationRequest bookInfo) {
