@@ -99,7 +99,6 @@ namespace BookList.GatewayApi.Controllers {
                     request.ContentType = "application/json";
                     request.Timeout = (int)client.OperationTimeout.TotalMilliseconds;
                     request.ReadWriteTimeout = (int)client.ReadWriteTimeout.TotalMilliseconds;
-                    request.ContentLength = 0;
 
                     try {
                         using (Stream requestStream = request.GetRequestStream()) {
